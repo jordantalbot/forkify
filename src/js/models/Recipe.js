@@ -2,7 +2,7 @@ import axios from 'axios';
 import { key } from '../config';
 
 export default class Recipe {
-    constructor (id) {
+    constructor(id) {
         this.id = id;
     }
 
@@ -29,4 +29,28 @@ export default class Recipe {
     calcServings() {
         this.servings = 4;
     }
+
+    parseIngredients() {
+        const unitsLong = ['tablespoons', 'tablespoon', 'ounces', 'ounce', 'teaspoons', 'teaspoon', 'cups', 'pounds'];
+        const unitsShort = ['tbsp', 'tbsp', 'oz', 'oz', 'tsp', 'tsp', 'cup', 'pound'];
+
+        const newIngredients = this.ingredients.map(ing => {
+            // 1. Uniform units
+            let ingredient = ing.toLowerCase();
+            unitsLong.forEach((unit, i) => {
+                ingredient = ingredient.replace(unit, unitsShort[i]);
+            })
+
+            // 2. Remove parentheses
+            ingredient = ingredient.replace(/ *\([^)]*\ */g, ' ');
+
+
+            // 3. Parse Ingredients into count, unit, and ingredient
+            const arrIng = ingredient.split(' ');
+            const unitIndex = arrIng.findIndex(ings => unitsShort.includes(ings));
+
+            return ingredient;
+        });
+        this.ingredients = newIngredients
+    } 
 }
