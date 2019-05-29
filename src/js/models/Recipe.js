@@ -49,6 +49,14 @@ export default class Recipe {
             const arrIng = ingredient.split(' ');
             const unitIndex = arrIng.findIndex(ings => unitsShort.includes(ings));
 
+            if (unitIndex > -1) {
+                // There is a unit
+            } else if (parseInt(arrIng[0], 10)) {
+                // There is no unit, but 1st element is a number
+            } else if (unitIndex === -1) {
+                // There is no unit
+            }
+
             return ingredient;
         });
         this.ingredients = newIngredients
